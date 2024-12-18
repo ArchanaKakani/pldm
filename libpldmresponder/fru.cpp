@@ -946,9 +946,9 @@ void FruImpl::processFruPresenceChange(const DbusChangedProps& chProperties,
     {
         info("Presence changed to true for {PATH}", "PATH", fruObjPath);
         // oemUtilsHandler check is added to make sure that it is OEM_IBM path
-        if (fruInterface == "xyz.openbmc_project.Inventory.Item.PCIeDevice" &&
-            oemUtilsHandler)
+        if (fruInterface == "xyz.openbmc_project.Inventory.Item.PCIeDevice")
         {
+#ifdef OEM_IBM 
             if (pldm::responder::utils::checkIfIBMFru(fruObjPath))
             {
                 static constexpr auto portInterface =
@@ -972,6 +972,7 @@ void FruImpl::processFruPresenceChange(const DbusChangedProps& chProperties,
                 // rebuilt.
                 return;
             }
+#endif
         }
         buildIndividualFRU(fruInterface, fruObjPath);
     }
